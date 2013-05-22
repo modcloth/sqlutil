@@ -6,7 +6,7 @@ all: build
 build:
 	go build -x $(TARGETS)
 
-test: build
+test:
 	go test -x $(TARGETS)
 
-.PHONY: all build
+.PHONY: all build test
