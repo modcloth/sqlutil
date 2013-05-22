@@ -1,0 +1,4 @@
+---
+language: go
+install: cd $TRAVIS_BUILD_DIR && make build
+script: go test -x github.com/modcloth/sqlutil
