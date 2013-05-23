@@ -11,3 +11,7 @@ before_install:
 - source ~/.ssh/agent.out
 install: cd $TRAVIS_BUILD_DIR && make build
 script: cd $TRAVIS_BUILD_DIR && make test
+notifications:
+  email:
+    recipients:
+      - flintknappers+sqlutil@modcloth.com
