@@ -1,6 +1,7 @@
 package sqlutil
 
 import (
+	"database/sql/driver"
 	"encoding/json"
 	"math/big"
 )
@@ -31,4 +32,12 @@ func (me *NullBigRat) Scan(value interface{}) error {
 
 	me.Valid = true
 	return me.BigRat.Scan(value)
+}
+
+func (me *NullBigRat) Value() (value driver.Value, err error) {
+	if me == nil || !me.Valid {
+		return nil, nil
+	}
+
+	return me.BigRat.Value()
 }

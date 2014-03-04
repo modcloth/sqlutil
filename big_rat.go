@@ -1,13 +1,15 @@
 package sqlutil
 
 import (
+	"database/sql/driver"
 	"encoding/json"
 	"fmt"
 	"math/big"
 )
 
 type BigRat struct {
-	R *big.Rat
+	R         *big.Rat
+	Precision int
 }
 
 func (me *BigRat) MarshalJSON() ([]byte, error) {
@@ -28,4 +30,12 @@ func (me *BigRat) Scan(value interface{}) error {
 	}
 
 	return nil
+}
+
+func (me *BigRat) Value() (value driver.Value, err error) {
+	if me == nil || me.R == nil {
+		return nil, nil
+	}
+
+	return me.R.FloatString(me.Precision), nil
 }
