@@ -1,15 +1,16 @@
 package sqlutil
 
 import (
+	"database/sql/driver"
 	"encoding/json"
-	"math/big"
 )
 
 type NullBigInt struct {
-	BigInt *BigInt
+	BigInt BigInt
 	Valid  bool
 }
 
+//Marshals nested BigInt struct or nil if invalid
 func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
@@ -21,14 +22,32 @@ func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func (me *NullBigInt) Scan(value interface{}) error {
-	me.BigInt = &BigInt{I: &big.Int{}}
+//Implements sql.Scanner
+//
+//Accepts nil, proxies everything else to nested BigInt
+func (me *NullBigInt) Scan(value interface{}) (err error) {
+	me.BigInt = BigInt{}
 
 	if value == nil {
 		me.Valid = false
 		return nil
 	}
 
-	me.Valid = true
-	return me.BigInt.Scan(value)
+	err = me.BigInt.Scan(value)
+
+	if err == nil {
+		me.Valid = true
+	}
+
+	return err
+}
+
+//Implements driver.Valuer
+//
+//Returns nil if invalid, otherwise proxies to nested BigInt
+func (me *NullBigInt) Value() (value driver.Value, err error) {
+	if !me.Valid {
+		return nil, nil
+	}
+	return me.BigInt.Value()
 }
