@@ -3,7 +3,7 @@ TARGETS := \
 
 all: build test
 
-build:
+build: deps
 	go build -x $(TARGETS)
 
 deps:
