@@ -14,7 +14,7 @@ type BigRat struct {
 }
 
 func (me *BigRat) MarshalJSON() ([]byte, error) {
-	return json.Marshal(me.Rat.String())
+	return json.Marshal(me.Rat.FloatString(me.Precision))
 }
 
 func (me *BigRat) Scan(value interface{}) error {
