@@ -7,7 +7,7 @@ import (
 )
 
 type NullBigRat struct {
-	BigRat *BigRat
+	BigRat BigRat
 	Valid  bool
 }
 
@@ -23,7 +23,7 @@ func (me *NullBigRat) MarshalJSON() ([]byte, error) {
 }
 
 func (me *NullBigRat) Scan(value interface{}) error {
-	me.BigRat = &BigRat{R: &big.Rat{}}
+	me.BigRat = BigRat{R: &big.Rat{}}
 
 	if value == nil {
 		me.Valid = false

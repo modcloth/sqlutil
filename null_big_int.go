@@ -7,7 +7,7 @@ import (
 )
 
 type NullBigInt struct {
-	BigInt *BigInt
+	BigInt BigInt
 	Valid  bool
 }
 
@@ -23,7 +23,7 @@ func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 }
 
 func (me *NullBigInt) Scan(value interface{}) error {
-	me.BigInt = &BigInt{I: &big.Int{}}
+	me.BigInt = BigInt{I: &big.Int{}}
 
 	if value == nil {
 		me.Valid = false
