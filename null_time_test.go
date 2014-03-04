@@ -40,11 +40,11 @@ func TestNullTimeScan(t *testing.T) {
 		expected sqlutil.NullTime
 		err      error
 	}{
-		{int64(2), sqlutil.NullTime{}, errors.New("Couldn't scan int64")},
-		{float64(2.5), sqlutil.NullTime{}, errors.New("Couldn't scan float64")},
-		{true, sqlutil.NullTime{}, errors.New("Couldn't scan bool")},
-		{[]byte{5}, sqlutil.NullTime{}, errors.New("Couldn't scan []uint8")},
-		{"2", sqlutil.NullTime{}, errors.New("Couldn't scan string")},
+		{int64(2), sqlutil.NullTime{}, errors.New("couldn't scan int64")},
+		{float64(2.5), sqlutil.NullTime{}, errors.New("couldn't scan float64")},
+		{true, sqlutil.NullTime{}, errors.New("couldn't scan bool")},
+		{[]byte{5}, sqlutil.NullTime{}, errors.New("couldn't scan []uint8")},
+		{"2", sqlutil.NullTime{}, errors.New("couldn't scan string")},
 		{now, sqlutil.NullTime{Time: now, Valid: true}, nil},
 		{nil, sqlutil.NullTime{}, nil},
 	}

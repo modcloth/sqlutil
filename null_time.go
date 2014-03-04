@@ -8,12 +8,18 @@ import (
 	"time"
 )
 
+//NullTime is a wrapper for time.Time that allows for 'null' values from databases
+//
+//Satisfies:
+//json.Marshaler
+//sql.Scanner
+//driver.Valuer
 type NullTime struct {
 	Time  time.Time
 	Valid bool
 }
 
-//Implements sql.Scanner
+//Scan implements sql.Scanner
 //
 //Only accepts time.Time structs (and nil)
 func (nt *NullTime) Scan(value interface{}) error {
@@ -27,13 +33,13 @@ func (nt *NullTime) Scan(value interface{}) error {
 		nt.Valid = true
 		nt.Time = value.(time.Time)
 	default:
-		return fmt.Errorf("Couldn't scan %+v", reflect.TypeOf(value))
+		return fmt.Errorf("couldn't scan %+v", reflect.TypeOf(value))
 	}
 
 	return nil
 }
 
-//Returns "" if null, otherwise time.String()
+//String returns "" if null, otherwise time.String()
 func (nt *NullTime) String() string {
 	if !nt.Valid {
 		return ""
@@ -42,7 +48,7 @@ func (nt *NullTime) String() string {
 	return nt.Time.String()
 }
 
-//Implements driver.Valuer
+//Value implements driver.Valuer
 //
 //Returns nil if null, otherwise the nested time struct
 func (nt *NullTime) Value() (driver.Value, error) {
@@ -53,14 +59,14 @@ func (nt *NullTime) Value() (driver.Value, error) {
 	return nt.Time, nil
 }
 
-//Marshals nested Time struct or nil if invalid
-func (me *NullTime) MarshalJSON() ([]byte, error) {
+//MarshalJSON marshals nested Time struct or nil if invalid
+func (nt *NullTime) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
-	if !me.Valid {
+	if !nt.Valid {
 		data = nil
 	} else {
-		data = me.Time
+		data = nt.Time
 	}
 
 	return json.Marshal(data)

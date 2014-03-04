@@ -5,49 +5,53 @@ import (
 	"encoding/json"
 )
 
+//NullBigRat is a wrapper for BigRat that allows nil and satisfies:
+//json.Marshaler
+//sql.Scanner
+//driver.Valuer
 type NullBigRat struct {
 	BigRat BigRat
 	Valid  bool
 }
 
-//Marshals nested BigRat struct or nil if invalid
-func (me *NullBigRat) MarshalJSON() ([]byte, error) {
+//MarshalJSON marshals nested BigRat struct or nil if invalid
+func (nbr *NullBigRat) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
 	data = nil
-	if me.Valid {
-		data = me.BigRat
+	if nbr.Valid {
+		data = nbr.BigRat
 	}
 
 	return json.Marshal(data)
 }
 
-//Implements sql.Scanner
+//Scan implements sql.Scanner
 //
 //Accepts nil, proxies everything else to nested BigRat
-func (me *NullBigRat) Scan(value interface{}) (err error) {
-	me.BigRat = BigRat{}
+func (nbr *NullBigRat) Scan(value interface{}) (err error) {
+	nbr.BigRat = BigRat{}
 
 	if value == nil {
-		me.Valid = false
+		nbr.Valid = false
 		return nil
 	}
 
-	err = me.BigRat.Scan(value)
+	err = nbr.BigRat.Scan(value)
 
 	if err == nil {
-		me.Valid = true
+		nbr.Valid = true
 	}
 
 	return err
 }
 
-//Implements driver.Valuer
+//Value implements driver.Valuer
 //
 //Returns nil if invalid, otherwise proxies to nested BigRat
-func (me *NullBigRat) Value() (value driver.Value, err error) {
-	if !me.Valid {
+func (nbr *NullBigRat) Value() (value driver.Value, err error) {
+	if !nbr.Valid {
 		return nil, nil
 	}
-	return me.BigRat.Value()
+	return nbr.BigRat.Value()
 }

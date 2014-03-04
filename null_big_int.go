@@ -5,49 +5,53 @@ import (
 	"encoding/json"
 )
 
+//NullBigInt is a wrapper for BigInt that allows nil and satisfies:
+//json.Marshaler
+//sql.Scanner
+//driver.Valuer
 type NullBigInt struct {
 	BigInt BigInt
 	Valid  bool
 }
 
-//Marshals nested BigInt struct or nil if invalid
-func (me *NullBigInt) MarshalJSON() ([]byte, error) {
+//MarshalJSON marshals nested BigInt struct or nil if invalid
+func (nbi *NullBigInt) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
 	data = nil
-	if me.Valid {
-		data = me.BigInt
+	if nbi.Valid {
+		data = nbi.BigInt
 	}
 
 	return json.Marshal(data)
 }
 
-//Implements sql.Scanner
+//Scan implements sql.Scanner
 //
 //Accepts nil, proxies everything else to nested BigInt
-func (me *NullBigInt) Scan(value interface{}) (err error) {
-	me.BigInt = BigInt{}
+func (nbi *NullBigInt) Scan(value interface{}) (err error) {
+	nbi.BigInt = BigInt{}
 
 	if value == nil {
-		me.Valid = false
+		nbi.Valid = false
 		return nil
 	}
 
-	err = me.BigInt.Scan(value)
+	err = nbi.BigInt.Scan(value)
 
 	if err == nil {
-		me.Valid = true
+		nbi.Valid = true
 	}
 
 	return err
 }
 
-//Implements driver.Valuer
+//Value implements driver.Valuer
 //
 //Returns nil if invalid, otherwise proxies to nested BigInt
-func (me *NullBigInt) Value() (value driver.Value, err error) {
-	if !me.Valid {
+func (nbi *NullBigInt) Value() (value driver.Value, err error) {
+	if !nbi.Valid {
 		return nil, nil
 	}
-	return me.BigInt.Value()
+	return nbi.BigInt.Value()
 }

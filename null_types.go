@@ -5,52 +5,55 @@ import (
 	"encoding/json"
 )
 
+//NullString is a wrapper around sql.NullString that satifies json.Marshaler
 type NullString struct {
 	sql.NullString
 }
 
-//Marshals nested String or nil if invalid
-func (me *NullString) MarshalJSON() ([]byte, error) {
+//MarshalJSON marshals nested String or nil if invalid
+func (ns *NullString) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
-	if !me.Valid {
+	if !ns.Valid {
 		data = nil
 	} else {
-		data = me.String
+		data = ns.String
 	}
 
 	return json.Marshal(data)
 }
 
+//NullInt64 is a wrapper around sql.NullInt64 that satifies json.Marshaler
 type NullInt64 struct {
 	sql.NullInt64
 }
 
-//Marshals nested Int64 or nil if invalid
-func (me *NullInt64) MarshalJSON() ([]byte, error) {
+//MarshalJSON marshals nested Int64 or nil if invalid
+func (ni *NullInt64) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
-	if !me.Valid {
+	if !ni.Valid {
 		data = nil
 	} else {
-		data = me.Int64
+		data = ni.Int64
 	}
 
 	return json.Marshal(data)
 }
 
+//NullFloat64 is a wrapper around sql.NullInt64 that satifies json.Marshaler
 type NullFloat64 struct {
 	sql.NullFloat64
 }
 
-//Marshals nested Float64 or nil if invalid
-func (me *NullFloat64) MarshalJSON() ([]byte, error) {
+//MarshalJSON is a wrapper around sql.NullFloat64 that satifies json.Marshaler
+func (nf *NullFloat64) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
-	if !me.Valid {
+	if !nf.Valid {
 		data = nil
 	} else {
-		data = me.Float64
+		data = nf.Float64
 	}
 
 	return json.Marshal(data)

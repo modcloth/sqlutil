@@ -40,12 +40,12 @@ func TestBigIntScan(t *testing.T) {
 		err      error
 	}{
 		{int64(2), sqlutil.BigInt{Int: *big.NewInt(2)}, nil},
-		{float64(2.2), sqlutil.BigInt{}, errors.New("Couldn't scan float64")},
-		{true, sqlutil.BigInt{}, errors.New("Couldn't scan bool")},
-		{[]byte{5}, sqlutil.BigInt{}, errors.New("Couldn't scan []uint8")},
+		{float64(2.2), sqlutil.BigInt{}, errors.New("couldn't scan float64")},
+		{true, sqlutil.BigInt{}, errors.New("couldn't scan bool")},
+		{[]byte{5}, sqlutil.BigInt{}, errors.New("couldn't scan []uint8")},
 		{"2", sqlutil.BigInt{Int: *big.NewInt(2)}, nil},
-		{time.Now(), sqlutil.BigInt{}, errors.New("Couldn't scan time.Time")},
-		{nil, sqlutil.BigInt{}, errors.New("Couldn't scan <nil>")},
+		{time.Now(), sqlutil.BigInt{}, errors.New("couldn't scan time.Time")},
+		{nil, sqlutil.BigInt{}, errors.New("couldn't scan <nil>")},
 	}
 
 	for _, tt := range tests {
