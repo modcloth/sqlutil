@@ -13,12 +13,11 @@ func TestBigRatValue(t *testing.T) {
 		n        sqlutil.BigRat
 		expected driver.Value
 	}{
-		{sqlutil.BigRat{R: big.NewRat(2, 4), Precision: 1}, "0.5"},
-		{sqlutil.BigRat{R: big.NewRat(-2, 4), Precision: 1}, "-0.5"},
-		{sqlutil.BigRat{R: big.NewRat(1, 3), Precision: 3}, "0.333"},
-		{sqlutil.BigRat{R: big.NewRat(1, 3), Precision: 1}, "0.3"},
-		{sqlutil.BigRat{R: big.NewRat(1, 3), Precision: 0}, "0"},
-		{sqlutil.BigRat{R: nil, Precision: 1}, nil},
+		{sqlutil.BigRat{R: *big.NewRat(2, 4), Precision: 1}, "0.5"},
+		{sqlutil.BigRat{R: *big.NewRat(-2, 4), Precision: 1}, "-0.5"},
+		{sqlutil.BigRat{R: *big.NewRat(1, 3), Precision: 3}, "0.333"},
+		{sqlutil.BigRat{R: *big.NewRat(1, 3), Precision: 1}, "0.3"},
+		{sqlutil.BigRat{R: *big.NewRat(1, 3), Precision: 0}, "0"},
 	}
 
 	for _, tt := range valueTests {

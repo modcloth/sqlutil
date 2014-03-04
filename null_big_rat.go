@@ -3,7 +3,6 @@ package sqlutil
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"math/big"
 )
 
 type NullBigRat struct {
@@ -23,7 +22,7 @@ func (me *NullBigRat) MarshalJSON() ([]byte, error) {
 }
 
 func (me *NullBigRat) Scan(value interface{}) error {
-	me.BigRat = BigRat{R: &big.Rat{}}
+	me.BigRat = BigRat{}
 
 	if value == nil {
 		me.Valid = false
@@ -35,9 +34,8 @@ func (me *NullBigRat) Scan(value interface{}) error {
 }
 
 func (me *NullBigRat) Value() (value driver.Value, err error) {
-	if me == nil || !me.Valid {
+	if !me.Valid {
 		return nil, nil
 	}
-
 	return me.BigRat.Value()
 }

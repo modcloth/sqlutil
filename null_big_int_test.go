@@ -13,11 +13,10 @@ func TestNullBigIntValue(t *testing.T) {
 		n        sqlutil.NullBigInt
 		expected driver.Value
 	}{
-		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: big.NewInt(2)}, Valid: true}, "2"},
-		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: big.NewInt(1844674407370955)}, Valid: true}, "1844674407370955"},
-		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: big.NewInt(-1)}, Valid: true}, "-1"},
-		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: nil}, Valid: true}, nil},
-		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: big.NewInt(4)}, Valid: false}, nil},
+		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: *big.NewInt(2)}, Valid: true}, "2"},
+		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: *big.NewInt(1844674407370955)}, Valid: true}, "1844674407370955"},
+		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: *big.NewInt(-1)}, Valid: true}, "-1"},
+		{sqlutil.NullBigInt{BigInt: sqlutil.BigInt{I: *big.NewInt(4)}, Valid: false}, nil},
 	}
 
 	for _, tt := range valueTests {

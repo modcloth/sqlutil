@@ -3,7 +3,6 @@ package sqlutil
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"math/big"
 )
 
 type NullBigInt struct {
@@ -23,7 +22,7 @@ func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 }
 
 func (me *NullBigInt) Scan(value interface{}) error {
-	me.BigInt = BigInt{I: &big.Int{}}
+	me.BigInt = BigInt{}
 
 	if value == nil {
 		me.Valid = false
@@ -34,10 +33,9 @@ func (me *NullBigInt) Scan(value interface{}) error {
 	return me.BigInt.Scan(value)
 }
 
-func (me *BigInt) Value() (value driver.Value, err error) {
-	if me == nil || me.I == nil {
+func (me *NullBigInt) Value() (value driver.Value, err error) {
+	if !me.Valid {
 		return nil, nil
 	}
-
-	return me.I.String(), nil
+	return me.BigInt.Value()
 }
