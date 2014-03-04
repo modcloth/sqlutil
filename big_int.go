@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"reflect"
 )
 
 type BigInt struct {
@@ -17,14 +18,15 @@ func (me *BigInt) MarshalJSON() ([]byte, error) {
 
 func (me *BigInt) Scan(value interface{}) error {
 	switch value.(type) {
+	case int64:
+		me.Int = *big.NewInt(value.(int64))
 	case string:
-		me.Int = big.Int{}
 		if _, err := fmt.Sscan(value.(string), &me.Int); err != nil {
 			fmt.Println(err)
 			return err
 		}
 	default:
-		return fmt.Errorf("Couldn't scan non-string %+v into BigInt", value)
+		return fmt.Errorf("Couldn't scan %+v", reflect.TypeOf(value))
 	}
 
 	return nil

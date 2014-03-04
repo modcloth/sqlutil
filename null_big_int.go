@@ -21,7 +21,7 @@ func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func (me *NullBigInt) Scan(value interface{}) error {
+func (me *NullBigInt) Scan(value interface{}) (err error) {
 	me.BigInt = BigInt{}
 
 	if value == nil {
@@ -29,8 +29,13 @@ func (me *NullBigInt) Scan(value interface{}) error {
 		return nil
 	}
 
-	me.Valid = true
-	return me.BigInt.Scan(value)
+	err = me.BigInt.Scan(value)
+
+	if err == nil {
+		me.Valid = true
+	}
+
+	return err
 }
 
 func (me *NullBigInt) Value() (value driver.Value, err error) {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"reflect"
 )
 
 type BigRat struct {
@@ -18,13 +19,17 @@ func (me *BigRat) MarshalJSON() ([]byte, error) {
 
 func (me *BigRat) Scan(value interface{}) error {
 	switch value.(type) {
+	case int64:
+		me.Rat.SetInt64(value.(int64))
+	case float64:
+		me.Rat.SetFloat64(value.(float64))
 	case string:
 		if _, err := fmt.Sscan(value.(string), &me.Rat); err != nil {
 			fmt.Println(err)
 			return err
 		}
 	default:
-		return fmt.Errorf("Couldn't scan non-string %+v into BigRat", value)
+		return fmt.Errorf("Couldn't scan %+v", reflect.TypeOf(value))
 	}
 
 	return nil

@@ -21,7 +21,7 @@ func (me *NullBigRat) MarshalJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func (me *NullBigRat) Scan(value interface{}) error {
+func (me *NullBigRat) Scan(value interface{}) (err error) {
 	me.BigRat = BigRat{}
 
 	if value == nil {
@@ -29,8 +29,13 @@ func (me *NullBigRat) Scan(value interface{}) error {
 		return nil
 	}
 
-	me.Valid = true
-	return me.BigRat.Scan(value)
+	err = me.BigRat.Scan(value)
+
+	if err == nil {
+		me.Valid = true
+	}
+
+	return err
 }
 
 func (me *NullBigRat) Value() (value driver.Value, err error) {
