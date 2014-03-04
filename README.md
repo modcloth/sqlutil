@@ -2,7 +2,8 @@ sqlutil
 =======
 
 [![Build Status](https://travis-ci.org/modcloth/sqlutil.png?branch=master)](https://travis-ci.org/modcloth/sqlutil)
-[[Godoc][https://godoc.org/github.com/modcloth/sqlutil]]
+
+[Godoc](https://godoc.org/github.com/modcloth/sqlutil)
 
 **NOTE** API is not locked yet.
 
