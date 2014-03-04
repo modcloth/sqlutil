@@ -1,14 +1,9 @@
 ---
 language: go
-before_install:
-- gvm version
-- echo running gvm install twice is important.
-- gvm install go1.1 || true
-- gvm install go1.1 || true
-- gvm use go1.1
-- export GOPATH="$HOME/gopath:$GOPATH"
-install: cd $TRAVIS_BUILD_DIR && make build
-script: cd $TRAVIS_BUILD_DIR && make test
+go:
+- 1.1
+- 1.2
+- tip
 notifications:
   email:
     recipients:
