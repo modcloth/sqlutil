@@ -8,18 +8,18 @@ import (
 )
 
 type BigInt struct {
-	I big.Int
+	big.Int
 }
 
 func (me *BigInt) MarshalJSON() ([]byte, error) {
-	return json.Marshal(me.I)
+	return json.Marshal(me.Int)
 }
 
 func (me *BigInt) Scan(value interface{}) error {
 	switch value.(type) {
 	case string:
-		me.I = big.Int{}
-		if _, err := fmt.Sscan(value.(string), &me.I); err != nil {
+		me.Int = big.Int{}
+		if _, err := fmt.Sscan(value.(string), &me.Int); err != nil {
 			fmt.Println(err)
 			return err
 		}
@@ -31,5 +31,5 @@ func (me *BigInt) Scan(value interface{}) error {
 }
 
 func (me *BigInt) Value() (value driver.Value, err error) {
-	return me.I.String(), nil
+	return me.String(), nil
 }

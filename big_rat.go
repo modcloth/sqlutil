@@ -8,20 +8,18 @@ import (
 )
 
 type BigRat struct {
-	R         big.Rat
+	big.Rat
 	Precision int
 }
 
 func (me *BigRat) MarshalJSON() ([]byte, error) {
-	f, _ := me.R.Float64()
-	return json.Marshal(f)
+	return json.Marshal(me.Rat.String())
 }
 
 func (me *BigRat) Scan(value interface{}) error {
 	switch value.(type) {
 	case string:
-		me.R = big.Rat{}
-		if _, err := fmt.Sscan(value.(string), &me.R); err != nil {
+		if _, err := fmt.Sscan(value.(string), &me.Rat); err != nil {
 			fmt.Println(err)
 			return err
 		}
@@ -33,5 +31,5 @@ func (me *BigRat) Scan(value interface{}) error {
 }
 
 func (me *BigRat) Value() (value driver.Value, err error) {
-	return me.R.FloatString(me.Precision), nil
+	return me.FloatString(me.Precision), nil
 }

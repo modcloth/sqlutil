@@ -13,9 +13,9 @@ func TestBigIntValue(t *testing.T) {
 		n        sqlutil.BigInt
 		expected driver.Value
 	}{
-		{sqlutil.BigInt{I: *big.NewInt(2)}, "2"},
-		{sqlutil.BigInt{I: *big.NewInt(1844674407370955)}, "1844674407370955"},
-		{sqlutil.BigInt{I: *big.NewInt(-1)}, "-1"},
+		{sqlutil.BigInt{Int: *big.NewInt(2)}, "2"},
+		{sqlutil.BigInt{Int: *big.NewInt(1844674407370955)}, "1844674407370955"},
+		{sqlutil.BigInt{Int: *big.NewInt(-1)}, "-1"},
 	}
 
 	for _, tt := range valueTests {
