@@ -10,6 +10,7 @@ type NullBigRat struct {
 	Valid  bool
 }
 
+//Marshals nested BigRat struct or nil if invalid
 func (me *NullBigRat) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
@@ -21,6 +22,9 @@ func (me *NullBigRat) MarshalJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
+//Implements sql.Scanner
+//
+//Accepts nil, proxies everything else to nested BigRat
 func (me *NullBigRat) Scan(value interface{}) (err error) {
 	me.BigRat = BigRat{}
 
@@ -38,6 +42,9 @@ func (me *NullBigRat) Scan(value interface{}) (err error) {
 	return err
 }
 
+//Implements driver.Valuer
+//
+//Returns nil if invalid, otherwise proxies to nested BigRat
 func (me *NullBigRat) Value() (value driver.Value, err error) {
 	if !me.Valid {
 		return nil, nil

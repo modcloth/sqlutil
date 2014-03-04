@@ -12,10 +12,14 @@ type BigInt struct {
 	big.Int
 }
 
+//Marshals embedded big.Int
 func (me *BigInt) MarshalJSON() ([]byte, error) {
 	return json.Marshal(me.Int)
 }
 
+//Implements sql.Scanner
+//
+//Accepts int64 and string
 func (me *BigInt) Scan(value interface{}) error {
 	switch value.(type) {
 	case int64:
@@ -32,6 +36,9 @@ func (me *BigInt) Scan(value interface{}) error {
 	return nil
 }
 
+//Implements driver.Valuer
+//
+//Returns embedded big.Int.String()
 func (me *BigInt) Value() (value driver.Value, err error) {
 	return me.String(), nil
 }

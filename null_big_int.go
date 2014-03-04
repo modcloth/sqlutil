@@ -10,6 +10,7 @@ type NullBigInt struct {
 	Valid  bool
 }
 
+//Marshals nested BigInt struct or nil if invalid
 func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 	var data interface{}
 
@@ -21,6 +22,9 @@ func (me *NullBigInt) MarshalJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
+//Implements sql.Scanner
+//
+//Accepts nil, proxies everything else to nested BigInt
 func (me *NullBigInt) Scan(value interface{}) (err error) {
 	me.BigInt = BigInt{}
 
@@ -38,6 +42,9 @@ func (me *NullBigInt) Scan(value interface{}) (err error) {
 	return err
 }
 
+//Implements driver.Valuer
+//
+//Returns nil if invalid, otherwise proxies to nested BigInt
 func (me *NullBigInt) Value() (value driver.Value, err error) {
 	if !me.Valid {
 		return nil, nil

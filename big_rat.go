@@ -10,13 +10,17 @@ import (
 
 type BigRat struct {
 	big.Rat
-	Precision int
+	Precision int //Used when marshalling to strings via Rat.FloatString
 }
 
+//Marshals embedded big.Rat.FloatString()
 func (me *BigRat) MarshalJSON() ([]byte, error) {
 	return json.Marshal(me.Rat.FloatString(me.Precision))
 }
 
+//Implements sql.Scanner
+//
+//Accepts int64, float64, and string
 func (me *BigRat) Scan(value interface{}) error {
 	switch value.(type) {
 	case int64:
@@ -35,6 +39,9 @@ func (me *BigRat) Scan(value interface{}) error {
 	return nil
 }
 
+//Implements driver.Valuer
+//
+//Returns embedded big.Rat.FloatString with the precision specified on the object
 func (me *BigRat) Value() (value driver.Value, err error) {
 	return me.FloatString(me.Precision), nil
 }
