@@ -1,7 +1,7 @@
 TARGETS := \
   github.com/modcloth/sqlutil
 
-all: build
+all: build test
 
 build:
 	go build -x $(TARGETS)
