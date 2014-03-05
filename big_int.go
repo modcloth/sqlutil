@@ -1,30 +1,48 @@
 package sqlutil
 
 import (
+	"database/sql/driver"
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"reflect"
 )
 
+//BigInt is a wrapper for big.Int that satisfies:
+//json.Marshaler
+//sql.Scanner
+//driver.Valuer
 type BigInt struct {
-	I *big.Int
+	big.Int
 }
 
-func (me *BigInt) MarshalJSON() ([]byte, error) {
-	return json.Marshal(me.I)
+//MarshalJSON marshals embedded big.Int
+func (bi *BigInt) MarshalJSON() ([]byte, error) {
+	return json.Marshal(bi.Int)
 }
 
-func (me *BigInt) Scan(value interface{}) error {
+//Scan implements sql.Scanner
+//
+//Accepts int64 and string
+func (bi *BigInt) Scan(value interface{}) error {
 	switch value.(type) {
+	case int64:
+		bi.Int = *big.NewInt(value.(int64))
 	case string:
-		me.I = &big.Int{}
-		if _, err := fmt.Sscan(value.(string), me.I); err != nil {
+		if _, err := fmt.Sscan(value.(string), &bi.Int); err != nil {
 			fmt.Println(err)
 			return err
 		}
 	default:
-		return fmt.Errorf("Couldn't scan non-string %+v into BigInt", value)
+		return fmt.Errorf("couldn't scan %+v", reflect.TypeOf(value))
 	}
 
 	return nil
+}
+
+//Value implements driver.Valuer
+//
+//Returns embedded big.Int.String()
+func (bi *BigInt) Value() (value driver.Value, err error) {
+	return bi.String(), nil
 }
