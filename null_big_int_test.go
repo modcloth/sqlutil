@@ -44,7 +44,7 @@ func TestNullBigIntScan(t *testing.T) {
 		{int64(2), sqlutil.NullBigInt{BigInt: sqlutil.BigInt{Int: *big.NewInt(2)}, Valid: true}, nil},
 		{float64(2.5), sqlutil.NullBigInt{}, errors.New("couldn't scan float64")},
 		{true, sqlutil.NullBigInt{}, errors.New("couldn't scan bool")},
-		{[]byte{5}, sqlutil.NullBigInt{}, errors.New("couldn't scan []uint8")},
+		{[]byte("9"), sqlutil.NullBigInt{BigInt: sqlutil.BigInt{Int: *big.NewInt(9)}, Valid: true}, nil},
 		{"2", sqlutil.NullBigInt{BigInt: sqlutil.BigInt{Int: *big.NewInt(2)}, Valid: true}, nil},
 		{time.Now(), sqlutil.NullBigInt{}, errors.New("couldn't scan time.Time")},
 		{nil, sqlutil.NullBigInt{}, nil},

@@ -31,9 +31,8 @@ func (br *BigRat) Scan(value interface{}) error {
 		br.Rat.SetInt64(value.(int64))
 	case float64:
 		br.Rat.SetFloat64(value.(float64))
-	case string:
-		if _, err := fmt.Sscan(value.(string), &br.Rat); err != nil {
-			fmt.Println(err)
+	case []uint8, string:
+		if _, err := fmt.Sscan(asString(value), &br.Rat); err != nil {
 			return err
 		}
 	default:
