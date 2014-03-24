@@ -28,8 +28,8 @@ func (bi *BigInt) Scan(value interface{}) error {
 	switch value.(type) {
 	case int64:
 		bi.Int = *big.NewInt(value.(int64))
-	case string:
-		if _, err := fmt.Sscan(value.(string), &bi.Int); err != nil {
+	case []byte, string:
+		if _, err := fmt.Sscan(asString(value), &bi.Int); err != nil {
 			fmt.Println(err)
 			return err
 		}

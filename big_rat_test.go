@@ -45,7 +45,7 @@ func TestBigRatScan(t *testing.T) {
 		{int64(2), sqlutil.BigRat{Rat: *big.NewRat(2, 1)}, nil},
 		{float64(2.5), sqlutil.BigRat{Rat: *big.NewRat(5, 2)}, nil},
 		{true, sqlutil.BigRat{}, errors.New("couldn't scan bool")},
-		{[]byte{5}, sqlutil.BigRat{}, errors.New("couldn't scan []uint8")},
+		{[]byte("9.55"), sqlutil.BigRat{Rat: *big.NewRat(955, 100)}, nil},
 		{"2", sqlutil.BigRat{Rat: *big.NewRat(2, 1)}, nil},
 		{time.Now(), sqlutil.BigRat{}, errors.New("couldn't scan time.Time")},
 		{nil, sqlutil.BigRat{}, errors.New("couldn't scan <nil>")},
