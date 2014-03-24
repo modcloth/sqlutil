@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/big"
 	"reflect"
+	"strings"
 )
 
 //BigRat is a wrapper for big.Rat that satisfies:
@@ -30,9 +31,14 @@ func (br *BigRat) Scan(value interface{}) error {
 	case int64:
 		br.Rat.SetInt64(value.(int64))
 	case float64:
+		br.Precision = 16 //Not sure of a better way to determine this value
 		br.Rat.SetFloat64(value.(float64))
 	case []uint8, string:
-		if _, err := fmt.Sscan(asString(value), &br.Rat); err != nil {
+		str := asString(value)
+		if i := strings.Index(str, "."); i != -1 {
+			br.Precision = len(str) - i - 1
+		}
+		if _, err := fmt.Sscan(str, &br.Rat); err != nil {
 			return err
 		}
 	default:

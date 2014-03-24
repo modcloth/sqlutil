@@ -41,11 +41,11 @@ func TestNullBigRatScan(t *testing.T) {
 		expected sqlutil.NullBigRat
 		err      error
 	}{
-		{int64(2), sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(2, 1)}, Valid: true}, nil},
-		{float64(2.5), sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(5, 2)}, Valid: true}, nil},
+		{int64(2), sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(2, 1), Precision: 0}, Valid: true}, nil},
+		{float64(2.5), sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(5, 2), Precision: 16}, Valid: true}, nil},
 		{true, sqlutil.NullBigRat{}, errors.New("couldn't scan bool")},
-		{[]byte("9.55"), sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(955, 100)}, Valid: true}, nil},
-		{"2", sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(2, 1)}, Valid: true}, nil},
+		{[]byte("9.55"), sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(955, 100), Precision: 2}, Valid: true}, nil},
+		{"2.2", sqlutil.NullBigRat{BigRat: sqlutil.BigRat{Rat: *big.NewRat(11, 5), Precision: 1}, Valid: true}, nil},
 		{time.Now(), sqlutil.NullBigRat{}, errors.New("couldn't scan time.Time")},
 		{nil, sqlutil.NullBigRat{}, nil},
 	}
@@ -58,7 +58,9 @@ func TestNullBigRatScan(t *testing.T) {
 			t.Errorf("%+v.Scan(%v): expected error %+v, got error: %+v", actual, tt.n, tt.err, err)
 		}
 
-		if actual.Valid != tt.expected.Valid || actual.BigRat.Rat.Cmp(&tt.expected.BigRat.Rat) != 0 {
+		if actual.Valid != tt.expected.Valid ||
+			actual.BigRat.Rat.Cmp(&tt.expected.BigRat.Rat) != 0 ||
+			actual.BigRat.Precision != tt.expected.BigRat.Precision {
 			t.Errorf("%+v.Scan(%v): expected %+v, actual: %+v", actual, tt.n, tt.expected, actual)
 		}
 	}
