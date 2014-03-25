@@ -42,11 +42,11 @@ func TestBigRatScan(t *testing.T) {
 		expected sqlutil.BigRat
 		err      error
 	}{
-		{int64(2), sqlutil.BigRat{Rat: *big.NewRat(2, 1)}, nil},
-		{float64(2.5), sqlutil.BigRat{Rat: *big.NewRat(5, 2)}, nil},
+		{int64(2), sqlutil.BigRat{Rat: *big.NewRat(2, 1), Precision: 0}, nil},
+		{float64(2.5), sqlutil.BigRat{Rat: *big.NewRat(5, 2), Precision: 16}, nil},
 		{true, sqlutil.BigRat{}, errors.New("couldn't scan bool")},
-		{[]byte("9.55"), sqlutil.BigRat{Rat: *big.NewRat(955, 100)}, nil},
-		{"2", sqlutil.BigRat{Rat: *big.NewRat(2, 1)}, nil},
+		{[]byte("9.55"), sqlutil.BigRat{Rat: *big.NewRat(955, 100), Precision: 2}, nil},
+		{"2.2", sqlutil.BigRat{Rat: *big.NewRat(11, 5), Precision: 1}, nil},
 		{time.Now(), sqlutil.BigRat{}, errors.New("couldn't scan time.Time")},
 		{nil, sqlutil.BigRat{}, errors.New("couldn't scan <nil>")},
 	}
@@ -59,7 +59,7 @@ func TestBigRatScan(t *testing.T) {
 			t.Errorf("%+v.Scan(%v): expected error %+v, got error: %+v", actual, tt.n, tt.err, err)
 		}
 
-		if actual.Rat.Cmp(&tt.expected.Rat) != 0 {
+		if actual.Rat.Cmp(&tt.expected.Rat) != 0 || actual.Precision != tt.expected.Precision {
 			t.Errorf("%+v.Scan(%v): expected %+v, actual: %+v", actual, tt.n, tt.expected, actual)
 		}
 	}
