@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/big"
 	"reflect"
 	"strings"
@@ -53,4 +54,14 @@ func (br *BigRat) Scan(value interface{}) error {
 //Returns embedded big.Rat.FloatString with the precision specified on the object
 func (br *BigRat) Value() (value driver.Value, err error) {
 	return br.FloatString(br.Precision), nil
+}
+
+//Sub subtracts two numbers into the given struct.
+//
+//Analagous to big.Rat.Sub(), but also sets the precision of the resulting BigRat.
+//If the two numbers have different precision, uses the less-precise one.
+func (br *BigRat) Sub(x *BigRat, y *BigRat) *BigRat {
+	br.Rat.Sub(&x.Rat, &y.Rat)
+	br.Precision = int(math.Min(float64(x.Precision), float64(y.Precision)))
+	return br
 }
