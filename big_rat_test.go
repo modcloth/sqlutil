@@ -64,3 +64,37 @@ func TestBigRatScan(t *testing.T) {
 		}
 	}
 }
+
+func TestBigRatSub(t *testing.T) {
+	var valueTests = []struct {
+		x        sqlutil.BigRat
+		y        sqlutil.BigRat
+		expected sqlutil.BigRat
+	}{
+		{
+			sqlutil.BigRat{Rat: *big.NewRat(5, 2), Precision: 16},
+			sqlutil.BigRat{Rat: *big.NewRat(3, 4), Precision: 16},
+			sqlutil.BigRat{Rat: *big.NewRat(7, 4), Precision: 16},
+		},
+		{
+			sqlutil.BigRat{Rat: *big.NewRat(5, 2), Precision: 16},
+			sqlutil.BigRat{Rat: *big.NewRat(3, 4), Precision: 2},
+			sqlutil.BigRat{Rat: *big.NewRat(7, 4), Precision: 2},
+		},
+		{
+			sqlutil.BigRat{Rat: *big.NewRat(5, 2), Precision: 0},
+			sqlutil.BigRat{Rat: *big.NewRat(3, 4), Precision: 2},
+			sqlutil.BigRat{Rat: *big.NewRat(7, 4), Precision: 0},
+		},
+	}
+
+	for _, tt := range valueTests {
+
+		actual := sqlutil.BigRat{}
+		actual.Sub(&tt.x, &tt.y)
+
+		if actual.Rat.Cmp(&tt.expected.Rat) != 0 || actual.Precision != tt.expected.Precision {
+			t.Errorf("br.Sub(%+v, %+v): expected %+v, actual %+v", tt.x, tt.y, tt.expected, actual)
+		}
+	}
+}
