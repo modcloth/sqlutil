@@ -43,6 +43,6 @@ func (bi *BigInt) Scan(value interface{}) error {
 //Value implements driver.Valuer
 //
 //Returns embedded big.Int.String()
-func (bi *BigInt) Value() (value driver.Value, err error) {
+func (bi BigInt) Value() (value driver.Value, err error) {
 	return bi.String(), nil
 }
