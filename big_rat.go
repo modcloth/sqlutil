@@ -52,7 +52,7 @@ func (br *BigRat) Scan(value interface{}) error {
 //Value implements driver.Valuer
 //
 //Returns embedded big.Rat.FloatString with the precision specified on the object
-func (br *BigRat) Value() (value driver.Value, err error) {
+func (br BigRat) Value() (value driver.Value, err error) {
 	return br.FloatString(br.Precision), nil
 }
 

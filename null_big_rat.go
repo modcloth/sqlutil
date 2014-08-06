@@ -49,7 +49,7 @@ func (nbr *NullBigRat) Scan(value interface{}) (err error) {
 //Value implements driver.Valuer
 //
 //Returns nil if invalid, otherwise proxies to nested BigRat
-func (nbr *NullBigRat) Value() (value driver.Value, err error) {
+func (nbr NullBigRat) Value() (value driver.Value, err error) {
 	if !nbr.Valid {
 		return nil, nil
 	}

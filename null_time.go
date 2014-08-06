@@ -51,7 +51,7 @@ func (nt *NullTime) String() string {
 //Value implements driver.Valuer
 //
 //Returns nil if null, otherwise the nested time struct
-func (nt *NullTime) Value() (driver.Value, error) {
+func (nt NullTime) Value() (driver.Value, error) {
 	if !nt.Valid {
 		return nil, nil
 	}

@@ -49,7 +49,7 @@ func (nbi *NullBigInt) Scan(value interface{}) (err error) {
 //Value implements driver.Valuer
 //
 //Returns nil if invalid, otherwise proxies to nested BigInt
-func (nbi *NullBigInt) Value() (value driver.Value, err error) {
+func (nbi NullBigInt) Value() (value driver.Value, err error) {
 	if !nbi.Valid {
 		return nil, nil
 	}
