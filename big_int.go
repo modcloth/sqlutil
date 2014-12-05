@@ -18,7 +18,7 @@ type BigInt struct {
 
 //MarshalJSON marshals embedded big.Int
 func (bi *BigInt) MarshalJSON() ([]byte, error) {
-	return json.Marshal(bi.Int)
+	return json.Marshal(&bi.Int)
 }
 
 //Scan implements sql.Scanner

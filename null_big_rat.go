@@ -16,14 +16,11 @@ type NullBigRat struct {
 
 //MarshalJSON marshals nested BigRat struct or nil if invalid
 func (nbr *NullBigRat) MarshalJSON() ([]byte, error) {
-	var data interface{}
-
-	data = nil
-	if nbr.Valid {
-		data = nbr.BigRat
+	if !nbr.Valid {
+		return json.Marshal(nil)
 	}
 
-	return json.Marshal(data)
+	return json.Marshal(&nbr.BigRat)
 }
 
 //Scan implements sql.Scanner
