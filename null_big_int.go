@@ -16,14 +16,11 @@ type NullBigInt struct {
 
 //MarshalJSON marshals nested BigInt struct or nil if invalid
 func (nbi *NullBigInt) MarshalJSON() ([]byte, error) {
-	var data interface{}
-
-	data = nil
-	if nbi.Valid {
-		data = nbi.BigInt
+	if !nbi.Valid {
+		return json.Marshal(nil)
 	}
 
-	return json.Marshal(data)
+	return json.Marshal(&nbi.BigInt)
 }
 
 //Scan implements sql.Scanner
